@@ -1,0 +1,64 @@
+﻿@model EmployeeCreateModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Create Employee</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form role="form" asp-antiforgery="true" asp-action="AddEmployee"
+                      asp-controller="Employee" method="post">
+                    <div class="card-body">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Name"></label>
+                            <input type="text" class="form-control" asp-for="Name" placeholder="Enter Name">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ManagerId"></label>
+                            <input type="text" class="form-control" asp-for="ManagerId" placeholder="Enter Manager Id">
+                            <span asp-validation-for="ManagerId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Postion"></label>
+                            <input type="text" class="form-control" asp-for="Postion" placeholder="Enter Postion">
+                            <span asp-validation-for="Postion" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="SalaryAmount"></label>
+                            <input type="text" class="form-control" asp-for="SalaryAmount" placeholder="Enter Salary Amount">
+                            <span asp-validation-for="SalaryAmount" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="JoiningDate"></label>
+                            <input type="text" class="form-control" asp-for="JoiningDate" placeholder="Enter Joining Date">
+                            <span asp-validation-for="JoiningDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.card -->
+
+        </div>
+        <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
+</div><!-- /.container-fluid -->
+@section Scripts
+    {
+    <partial name="_ValidationScriptsPartial" />
+}

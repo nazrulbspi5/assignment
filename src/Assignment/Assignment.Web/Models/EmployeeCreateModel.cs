@@ -22,7 +22,7 @@ namespace Assignment.Web.Models
         public decimal SalaryAmount { get; set; }
         [Display(Name = "Joining Date")]
         public DateTime JoiningDate { get; set; }
-        public bool IsBonusAdded { get; set; }
+        public bool IsBonusAdded { get; set; } = true;
 
         private IEmployeeService? _employeeService;
 

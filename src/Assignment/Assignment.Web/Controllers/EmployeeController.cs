@@ -16,7 +16,9 @@ namespace Assignment.Web.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            EmployeeListModel model = _scope.Resolve<EmployeeListModel>();
+            return View(model.GetEmployees());
+
         }
         public IActionResult AddEmployee()
         {
@@ -41,6 +43,19 @@ namespace Assignment.Web.Controllers
                 }
             }            
             return View(model);
+        }
+
+        public async Task<JsonResult> GetEmployeeData()
+        {
+            var dataTableModel = new DataTablesAjaxRequestModel(Request);
+            var model = _scope.Resolve<EmployeeListModel>();
+            model.EmployeeSearchItem = _scope.Resolve<EmployeeSearch>();           
+            if(!string.IsNullOrWhiteSpace(Request.Query["SearchItem[Id]"].FirstOrDefault()))
+                model.EmployeeSearchItem.Id= int.Parse(Request.Query["SearchItem[Id]"].FirstOrDefault());
+
+           
+
+            return Json(await model.GetEmployeesPagedData(dataTableModel));
         }
 
     }

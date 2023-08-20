@@ -1,4 +1,5 @@
-﻿using Assignment.Infrastructure.UnitOfWorks;
+﻿using Assignment.Infrastructure.BusinessObjects;
+using Assignment.Infrastructure.UnitOfWorks;
 
 using EmployeeBO = Assignment.Infrastructure.BusinessObjects.Employee;
 using EmployeeEO = Assignment.Infrastructure.Entities.Employee;
@@ -59,6 +60,16 @@ namespace Assignment.Infrastructure.Services
         //    //return EmployeeBO;
         //}
 
+        public async Task<(int total, int totalDisplay, IList<EmployeeModel> records)> GetEmployees(
+            int pageIndex, int pageSize, string searchText, int? id, string orderby)
+        {
+            (IList<EmployeeModel> data, int total, int totalDisplay) results = await _applicationUnitOfWork
+                .Employees.GetEmployees(pageIndex, pageSize, searchText, id, orderby);
+
+
+
+            return (results.total, results.totalDisplay, results.data);
+        }
 
 
         public IList<EmployeeBO> GetEmployees()
@@ -67,10 +78,21 @@ namespace Assignment.Infrastructure.Services
 
             IList<EmployeeBO> employees = new List<EmployeeBO>();
 
-            //foreach (EmployeeEO employeeEO in employeesEO)
-            //{
-            //    employees.Add(_mapper.Map<EmployeeBO>(employeeEO));
-            //}
+            foreach (EmployeeEO employeeEO in employeesEO)
+            {
+                EmployeeBO employeeBO = new EmployeeBO
+                {
+                    Id=employeeEO.Id,
+                    Name = employeeEO.Name,
+                    Postion = employeeEO.Postion,
+                    IsBonusAdded=employeeEO.IsBonusAdded,
+                    SalaryAmount=employeeEO.SalaryAmount,
+                    JoiningDate=employeeEO.JoiningDate,
+                    ManagerId=employeeEO.ManagerId,
+
+                };
+                employees.Add(employeeBO);
+            }
 
             return employees;
         }

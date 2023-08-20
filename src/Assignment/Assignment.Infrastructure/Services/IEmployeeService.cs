@@ -8,6 +8,8 @@ namespace Assignment.Infrastructure.Services
         void DeleteEmployee(int id);
         void EditEmployee(Employee employee);
         IList<Employee> GetEmployees();
-       // Employee GetEmployee(int id);
+        Task<(int total, int totalDisplay, IList<EmployeeModel> records)> GetEmployees(int pageIndex,
+           int pageSize, string searchText,  int? id, string orderby);
+        // Employee GetEmployee(int id);
     }
 }

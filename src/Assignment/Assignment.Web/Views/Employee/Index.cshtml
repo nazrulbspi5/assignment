@@ -1,5 +1,181 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@*@model IEnumerable<SelectListItem>*@
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Employee ID</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="EmployeeSearchItem_Id" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary" value="Show Salary With Bonus" id="btn_Show" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success" value="Highlight Salary" id="btn_HighlightSalary" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-info" value="Highlight Name" id="btn_HighlightName" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="employees" class="table table-bordered table-hover">
+                    <thead class="">
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Position</th>
+                            <th class="text-center">SalaryAmount</th>
+                            <th class="text-center">JoiningDate</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+<partial name="_ModalPartial" />
+
+@section Styles{
+    <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+}
+
+@section Scripts{
+    <script src="~/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+    <script>
+        $(function () {
+            $('#employees').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    url: "/Employee/GetEmployeeData",
+                    type: "GET",
+                    data: function (d) {
+                        d.SearchItem = {
+                            Id: $("#EmployeeSearchItem_Id").val(),
+                        }
+                    },
+                },
+                //"columnDefs": [
+                //    {
+                //        targets: 0,
+                //        render: function (data, type, row) {
+                //            var badgeColor = GetBadgeColor(row[1]);
+                //            return `<a href="/App/Project/Details/${row[4]}">${data}</a> <span class="badge badge-pill ${badgeColor}"> ${row[1]} </span>`;
+                //        }
+                //    },
+                //    {
+                //        targets: [1, 5],
+                //        visible: false,
+                //        searchable: false,
+                //    },
+                //    {
+                //        targets: 2,
+                //        className: "dt-center",
+                //        render: function (data, type, row) {
+                //            return `<i class="fas fa-users td-icon"></i>  ${data > 0 ? data : "--"}`;
+                //        }
+                //    },
+                //    {
+                //        targets: 3,
+                //        className: "dt-center",
+                //        render: function (data, type, row) {
+                //            return `<i class="fa fa-clock td-icon"></i>  ${data}`;
+                //        }
+                //    },
+                //    {
+                //        targets: 4,
+                //        orderable: false,
+                //        className: "dt-center",
+                //        render: function (data, type, row) {
+                //            if (row[1] == "Owner") {
+                //                if ($("#SearchItem_Status").val() == '0') {
+                //                    return `<button type="submit" class="btn btn-info btn-sm" onclick="window.location.href='/App/Project/Edit/${data}'" value='${data}'>
+                //                                        <i class="fas fa-pencil-alt"></i>
+                //                                        Edit
+                //                                    </button>`
+                //                }
+                //                else {
+
+                //                    return `<button type="submit" class="btn btn-danger btn-sm show-bs-modal" data-id='${data}' value='${data}'>
+                //                                        <i class="fas fa-trash"></i>
+                //                                        Restore
+                //                                    </button>`;
+                //                }
+                //            }
+                //            else {
+                //                return `Invitation ${row[5] == 0 ? "Not Sent" : row[5]}`;
+                //            }
+                //        }
+                //    }
+                //]
+            });
+        });
+
+        function GetBadgeColor(str) {
+            if (str == 'Owner') {
+                return "badge-success";
+            }
+            else if (str == "Worker") {
+                return "badge-secondary";
+            }
+            else {
+                return "";
+            }
+        }
+
+        //$("#btn_Show").click(function () {
+           
+        //});
+
+        $("#btn_Show").click(function () {
+            var isNumber = $("#EmployeeSearchItem_Id").val();
+            if ($.isNumeric(isNumber)==false){
+                var modal = $("#modal-default");
+                modal.find('.modal-body p').text('Please provide valid employee id');
+                //$("#projectId").val(id);
+                //$("#restoreForm").attr("action", "/App/Project/Restore");
+                modal.modal('show');
+            }
+            else{
+                $('#employees').DataTable().ajax.reload(null, false);
+            }
+            
+        });
+
+        //$('#employees').on('click', '.show-bs-modal', function (event) {
+        //    var id = $(this).data("id");
+        //    var modal = $("#modal-default");
+        //    modal.find('.modal-body p').text('Please provide valid employee id');
+        //    //$("#projectId").val(id);
+        //    //$("#restoreForm").attr("action", "/App/Project/Restore");
+        //    modal.modal('show');
+        //});
+
+                        //$("#restoreButton").click(function () {
+                        //    $("#restoreForm").submit();
+                        //});
+
+    </script>
 }

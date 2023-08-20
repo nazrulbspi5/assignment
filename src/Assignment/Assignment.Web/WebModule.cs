@@ -9,7 +9,9 @@ namespace Assignment.Web
         {
 
             builder.RegisterType<EmployeeCreateModel>().AsSelf();
-            
+            builder.RegisterType<EmployeeListModel>().AsSelf();
+            builder.RegisterType<EmployeeSearch>().AsSelf();
+
             base.Load(builder);
         }
     }
